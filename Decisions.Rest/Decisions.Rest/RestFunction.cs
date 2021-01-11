@@ -11,7 +11,7 @@ namespace Decisions.Rest
     public class RestFunction
     {
         
-        public string HttpRestRequestor(HttpMethod method, string BaseAddress, string RequestUri, List<KeyValuePair<string,string>> Headers, List<KeyValuePair<string,string>> Parameters)
+        public string HttpRestRequestor(HttpMethod method, string BaseAddress, string RequestUri, KeyValuePair<string,string>[] Headers, KeyValuePair<string,string>[] Parameters)
         { 
             var client = new HttpClient();
             client.BaseAddress  = new Uri(BaseAddress);
