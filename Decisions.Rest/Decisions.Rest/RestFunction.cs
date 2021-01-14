@@ -16,36 +16,34 @@ namespace Decisions.Rest
         {
             try
             {
-                if (method != "Post")
-                {
-                    throw new NotImplementedException();
-                }
+               
 
-                var client = new HttpClient();
-                client.BaseAddress = new Uri(BaseAddress);
-                var _method = HttpMethod.Post;
-                var req = new HttpRequestMessage(_method, BaseAddress + RequestUri);
-
-                foreach (var h in Headers)
+                using (var client = new HttpClient())
                 {
-                    client.DefaultRequestHeaders.TryAddWithoutValidation(h.Key, h.Value);
+                    client.BaseAddress = new Uri(BaseAddress);
+                    var _method = HttpMethod.Post;
+                    var req = new HttpRequestMessage(_method, BaseAddress + RequestUri);
 
-                }
-                if (Parameters != null)
-                {
-                    List<KeyValuePair<string, string>> LKVP = new List<KeyValuePair<string, string>>();
-                    foreach (var items in Parameters)
+                    foreach (var h in Headers)
                     {
-                        LKVP.Add(new KeyValuePair<string, string>(items.Key, items.Value));
+                        client.DefaultRequestHeaders.TryAddWithoutValidation(h.Key, h.Value);
+
                     }
-                    req.Content = new FormUrlEncodedContent(LKVP.ToArray());
+                    if (Parameters != null)
+                    {
+                        List<KeyValuePair<string, string>> LKVP = new List<KeyValuePair<string, string>>();
+                        foreach (var items in Parameters)
+                        {
+                            LKVP.Add(new KeyValuePair<string, string>(items.Key, items.Value));
+                        }
+                        req.Content = new FormUrlEncodedContent(LKVP.ToArray());
+                    }
+
+
+                    var response = client.SendAsync(req).Result;
+                    var responseContent = response.Content.ReadAsStringAsync().Result;
+                    return responseContent;
                 }
-
-
-                var response = client.SendAsync(req).Result;
-                var responseContent = response.Content.ReadAsStringAsync().Result;
-                return responseContent;
-
             }
             catch (Exception)
             {
